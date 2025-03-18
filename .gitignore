@@ -32,3 +32,10 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore local environment files
+.env
+.venv
+
+flake_old.nix
+test_e2e.py
