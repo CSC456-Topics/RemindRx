@@ -40,3 +40,4 @@ terraform.rc
 .pytest_cache
 *.pyc
 *.pkl
+flake_old.nix
