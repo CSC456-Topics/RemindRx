@@ -9,7 +9,7 @@ The Next.js UI (front end) allows the user to login and authorize their login cr
 ### **Step 2:**
 
 ![Entity Diagram](entitydiagram.png)  
-Short Description: 
+Short Description: User authentication is handled by the Supabase auth.users table, which stores each user's email and password securely. The users table stores profile information like first name, last name, and auth_id, which references the id field in auth.users. The prescriptions table records individual medication schedules and is linked to the users table through a foreign key called patient. The prescriptions table has fields like the medication name, dosage amount, next scheduled time for taking the medication, and the last time a reminder email was sent. This db structure allows a one-to-many relationship where a single user can have multiple prescriptions.
 
 ### **Step 3: [sequence diagram builder](https://sequencediagram.org)**
 
