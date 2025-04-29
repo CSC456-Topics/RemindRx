@@ -10,6 +10,7 @@ zip -r "$ZIP_FILE" \
   ./recommend \
   ./requirements.txt \
   ./.ebextensions \
+  ./Procfile \
 
 # Upload the artifact to S3
 aws s3 cp "$ZIP_FILE" s3://elasticbeanstalk-us-east-1-433574703961
