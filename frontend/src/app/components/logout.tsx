@@ -23,7 +23,7 @@ export function Logout() {
 
             await new Promise(resolve => setTimeout(resolve, 200));
 
-            router.replace('/signin');
+            router.push('/signin');
             toast.success('Logged out successfully');
         } catch (err) {
             toast.error('Logout failed');
