@@ -3,31 +3,33 @@ import { userAtom } from "@/lib/atoms";
 import { useRouter } from 'next/navigation';
 import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export function Logout() {
     const setAtom = useSetAtom(userAtom);
+    const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
     const router = useRouter();
 
     async function handleClick() {
-        toast.info("Logout button clicked");
+        if (isLoggingOut) return;
+        setIsLoggingOut(true);
+        toast.info("Logging out...");
 
         try {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.error('Sign out error:', error);
-                toast.error('Sign out error: ' + error.message);
-                return;
-            }
-
-            console.log("Before logging out");
-
             setAtom(null);
-            toast.success('Logged out successfully');
 
-            router.push('/signin');
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            router.replace('/signin');
+            toast.success('Logged out successfully');
         } catch (err) {
-            console.error("Logout failed:", err);
-            toast.error("Something went wrong");
+            toast.error('Logout failed');
+            console.error(err);
+        } finally {
+            setIsLoggingOut(false);
         }
     }
 
@@ -37,7 +39,7 @@ export function Logout() {
             onClick={handleClick}
             type="button"
         >
-            Logout
+            {isLoggingOut ? "Logging out..." : "Logout"}
         </button>
     );
 }
