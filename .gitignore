@@ -51,4 +51,7 @@ __pycache__/
 sms_project_env/
 .DS_Store
 
+
 *.zip
+venv/
+
