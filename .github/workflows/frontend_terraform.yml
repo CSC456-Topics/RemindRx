@@ -29,7 +29,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - run: terraform fmt -check
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
         id: fmt
         continue-on-error: ${{ github.event_name == 'pull_request' }}
 
@@ -42,7 +42,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git commit -am "fixup: terraform fmt"
           git push
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
 
   terraform:
     runs-on: ubuntu-latest
@@ -57,15 +57,15 @@ jobs:
       - name: Set up terraform CLI
         uses: hashicorp/setup-terraform@v1
       - name: terraform init
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
         id: init
         run: terraform init -input=false
       - name: terraform validate
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
         if: ${{ github.event_name == 'pull_request' }}
         run: terraform validate -no-color
       - name: terraform plan
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
         id: plan
         if: ${{ github.event_name == 'pull_request' }}
         run: terraform plan -no-color -input=false
@@ -78,6 +78,6 @@ jobs:
             core.setFailed('Plan failed!')
       - name: terraform apply
         id: apply
-        working-directory: ./terraform
+        working-directory: ./frontend_terraform
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: terraform apply -auto-approve -input=false
