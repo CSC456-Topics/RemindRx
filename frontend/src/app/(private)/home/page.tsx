@@ -4,14 +4,14 @@ import { useAtomValue } from "jotai"
 import { userAtom } from "@/lib/atoms"
 import { toast } from "sonner";
 import TimeOfDay from '../components/timeOfDay'
-import { Prescription } from "@/types/PrecriptionData";
+import { Prescription, PrescriptionFlattened } from "@/types/PrecriptionData";
 import { supabase } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import Loading from "@/app/components/loading";
 
 export default function HomePage() {
   const userInfo = useAtomValue(userAtom);
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([])
+  const [prescriptions, setPrescriptions] = useState<PrescriptionFlattened[]>([])
   const [loading, setLoading] = useState(true)
 
 
