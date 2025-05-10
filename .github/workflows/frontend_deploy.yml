@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Application
+        run: npm run build
+
       - name: Build binary distribution and upload to artifactory
         run: |
           zip -r ../remindrx_nextapp-${{ github.sha }}.zip . .ebextensions
