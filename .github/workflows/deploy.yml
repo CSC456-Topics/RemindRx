@@ -1,57 +1,57 @@
-# This workflow will deploy the application to the running environment after a successful merge to main
-
-name: deploy
-
+name: Frontend Deploy
 on:
   workflow_run:
-    workflows: [Run Backend Tests] # Triggered by the test workflow
-    types: [completed] # The test workflow must complete
-    branches: [main] # Only when main is updated
-  workflow_dispatch:
+    workflows: [Run Frontend Tests]
+    types: [completed]
+    branches: [main]
 
+  workflow_dispatch:
 jobs:
   on-success:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only when test completed successfully 
+
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel
-          pip install -r server/requirements.txt
+        run: npm ci
 
-      - name: Build application zip
+      - name: Build binary distribution and upload to artifactory
         run: |
-          zip -r "remindrx_deploy-${{ github.sha }}.zip" ./server ./scanner ./recommend ./.ebextensions
+          zip -r ../remindrx_frontend-${{ github.sha }}.zip . .ebextensions
+          mv ../remindrx_frontend-${{ github.sha }}.zip .
 
       - name: Upload application artifact
         uses: actions/upload-artifact@v4
         with:
-          name: remindrx_application_artifact
-          path: remindrx_deploy-${{ github.sha }}.zip
+          name: remindrx_frontend_artifact
+          path: ./frontend/remindrx_frontend-${{ github.sha }}.zip
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-2"
 
       - name: Upload application file to AWS
-        run: aws s3 cp remindrx_deploy-${{ github.sha }}.zip s3://dddictionary-remindrx
-
+        run: aws s3 cp remindrx_frontend-${{ github.sha }}.zip s3://elasticbeanstalk-us-east-2-703671917357/
       - name: Create new application version
         run: |
           aws elasticbeanstalk create-application-version \
-          --application-name flaskbb \
-          --source-bundle S3Bucket="dddictionary-remindrx",S3Key="remindrx_deploy-${{ github.sha }}.zip" \
+          --application-name frontend \
+          --source-bundle S3Bucket="elasticbeanstalk-us-east-2-703671917357",S3Key="remindrx_frontend-${{ github.sha }}.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
       - name: Deploy application
-        run: |
-          aws elasticbeanstalk update-environment \
-          --environment-name flaskbb-env \
-          --version-label "ver-${{ github.sha }}"
+        run: aws elasticbeanstalk update-environment --environment-name frontend-environment --version-label "ver-${{ github.sha }}"

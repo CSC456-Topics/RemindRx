@@ -14,3 +14,20 @@ export interface Prescription {
     updated_at?: string | null,
     recommended_times?: Array<string> | null,
 }
+
+export interface PrescriptionFlattened {
+    id?: number,
+    medication?: string | null,
+    patient?: number | null,
+    description?: string | null,
+    amount?: number | null,
+    frequency?: string | null,
+    refills?: number | null,
+    refill_time?: string | null,
+    next_scheduled_time?: string | null,
+    last_taken_at?: string | null,
+    last_sent_time?: string | null,
+    created_at?: string | null,
+    updated_at?: string | null,
+    recommended_time: string | null,
+}
