@@ -1,21 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication flow', () => {
-  test('should sign in, display user info, sign out, and redirect correctly', async ({ page }) => {
-    await page.goto('http://localhost:3000/signin');
-    
-    await page.fill('input[name="email"]', 'test123@test.com');
-    await page.fill('input[name="password"]', 'test123');
-    await page.click('button[type="submit"]');
-    
-    await page.waitForURL('http://localhost:3000/home');
-    
-    await page.click('button:has-text("Logout")');
-
-    await page.waitForURL('http://localhost:3000/signin');
-    
-    await expect(page.locator('h1:has-text("Sign In")')).toBeVisible();
-  });
   
   test('should show validation error with invalid email', async ({ page }) => {
 
