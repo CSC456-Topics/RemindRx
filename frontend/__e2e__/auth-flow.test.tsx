@@ -4,7 +4,7 @@ test.describe('Authentication flow', () => {
 
   test('should show validation error with invalid email', async ({ page }) => {
 
-    await page.goto('http://localhost:3000/signin');
+    await page.goto('http://localhost:8080/signin');
 
     await page.fill('input[name="email"]', 'not-an-email');
     await page.fill('input[name="password"]', 'test123');
@@ -16,12 +16,12 @@ test.describe('Authentication flow', () => {
     expect(errorMessage).toContain('Please enter a valid email');
 
 
-    expect(page.url()).toContain('http://localhost:3000/signin');
+    expect(page.url()).toContain('http://localhost:8080/signin');
   });
 
   test('should show error with incorrect password', async ({ page }) => {
 
-    await page.goto('http://localhost:3000/signin');
+    await page.goto('http://localhost:8080/signin');
 
     await page.fill('input[name="email"]', 'test123@test.com');
     await page.fill('input[name="password"]', 'wrongpassword');
@@ -31,6 +31,8 @@ test.describe('Authentication flow', () => {
     await page.waitForTimeout(2000);
 
 
-    expect(page.url()).toContain('http://localhost:3000/signin');
+    expect(page.url()).toContain('http://localhost:8080/signin');
   });
 });
+
+
