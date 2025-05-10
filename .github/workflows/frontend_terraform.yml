@@ -6,13 +6,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "terraform/*"
-      - ".github/workflows/terraform.yaml"
+      - "frontend_terraform/*"
+      - ".github/workflows/frontend_terraform.yaml"
   pull_request:
     branches: [main]
     paths:
-      - "terraform/*"
-      - ".github/workflows/terraform.yaml"
+      - "frontend_terraform/*"
+      - ".github/workflows/forntend_terraform.yaml"
 jobs:
   format:
     permissions:
