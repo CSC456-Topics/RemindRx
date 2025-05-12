@@ -1,13 +1,14 @@
 # This workflow will deploy the application to the running environment after a successful merge to main
-
 name: deploy
 
 on:
   workflow_run:
-    workflows: [Run Backend Tests] # Triggered by the test workflow
-    types: [completed] # The test workflow must complete
-    branches: ["main", "abrar-deployment"] # Only when main is updated
-  workflow_dispatch:
+    workflows: ["Run Backend Tests"]
+    types: [completed]
+    branches: ["main", "abrar-deployment"] # ✅ Only trigger deploy when tests pass on these branches
+
+  workflow_dispatch: # ✅ Optional manual trigger
+
 
 jobs:
   on-success:
