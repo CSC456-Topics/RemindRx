@@ -9,11 +9,12 @@ on:
 
   workflow_dispatch: # ✅ Optional manual trigger
 
-
 jobs:
   on-success:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only when test completed successfully 
+    if: |
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v2
 
