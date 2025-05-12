@@ -6,7 +6,7 @@ on:
   workflow_run:
     workflows: [Run Backend Tests] # Triggered by the test workflow
     types: [completed] # The test workflow must complete
-    branches: [main] # Only when main is updated
+    branches: [main abrar-deployment] # Only when main is updated
   workflow_dispatch:
 
 jobs:
