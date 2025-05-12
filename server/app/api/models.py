@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 from scanner.model import extract_text_from_label
-from .utils import upload, get_db, get_email, get_patient, get_morning_medications, get_afternoon_medications , get_evening_medications
+from .utils import upload, get_db, get_patient, get_morning_medications, get_afternoon_medications , get_evening_medications
 import tempfile
 from recommend.recommend2db import recommend2db
 
@@ -26,9 +26,14 @@ def scan():
     if image.filename == '':
         return jsonify({"error": "No file was selected"}), 400
     
+    name = request.form.get("name", "")
+    refill_time = request.form.get("refillTime", "")
+    refills = request.form.get("refills", "")
+    amount = request.form.get("amount", "")
+    
     try:
         extracted_text = extract_text_from_label(image)
-        times = recommend2db(extracted_text)
+        times = recommend2db(extracted_text, name, refill_time, refills, amount)
         #insert email functionality here
         #make sure to use the helper function to get the email of the user with the given patient_id 6
         return jsonify({"times": times})
