@@ -18,7 +18,7 @@ aws s3 cp "$ZIP_FILE" s3://elasticbeanstalk-us-east-1-433574703961
 
 # Create a new application version in Elastic Beanstalk
 aws elasticbeanstalk create-application-version \
-  --application-name flaskbb \
+  --application-name RemindRX \
   --source-bundle S3Bucket="elasticbeanstalk-us-east-1-433574703961",S3Key="$ZIP_FILE" \
   --version-label "ver-$1-$TIMESTAMP" \
   --description "New deploy version" \
@@ -26,6 +26,6 @@ aws elasticbeanstalk create-application-version \
 
 # Update the Elastic Beanstalk environment
 aws elasticbeanstalk update-environment \
-  --environment-name flaskbb-env \
+  --environment-name RemindRX-env \
   --version-label "ver-$1-$TIMESTAMP" \
   --region "us-east-1"

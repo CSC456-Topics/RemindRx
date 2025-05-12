@@ -45,7 +45,7 @@ jobs:
       - name: Create new application version
         run: |
           aws elasticbeanstalk create-application-version \
-          --application-name flaskbb \
+          --application-name RemindRX \
           --source-bundle S3Bucket="dddictionary-remindrx",S3Key="remindrx_deploy-${{ github.sha }}.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
@@ -53,5 +53,5 @@ jobs:
       - name: Deploy application
         run: |
           aws elasticbeanstalk update-environment \
-          --environment-name flaskbb-env \
+          --environment-name RemindRX-env \
           --version-label "ver-${{ github.sha }}"
