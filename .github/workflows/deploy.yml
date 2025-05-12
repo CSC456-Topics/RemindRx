@@ -1,18 +1,20 @@
 # This workflow will deploy the application to the running environment after a successful merge to main
-
 name: deploy
 
 on:
   workflow_run:
-    workflows: [Run Backend Tests] # Triggered by the test workflow
-    types: [completed] # The test workflow must complete
-    branches: [main] # Only when main is updated
-  workflow_dispatch:
+    workflows: ["Run Backend Tests"]
+    types: [completed]
+    branches: ["main", "abrar-deployment"] # ✅ Only trigger deploy when tests pass on these branches
+
+  workflow_dispatch: # ✅ Optional manual trigger
 
 jobs:
   on-success:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only when test completed successfully 
+    if: |
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v2
 
@@ -20,11 +22,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install wheel
-          pip install -r server/requirements.txt
+          pip install -r requirements.txt
 
       - name: Build application zip
         run: |
-          zip -r "remindrx_deploy-${{ github.sha }}.zip" ./server ./scanner ./recommend ./.ebextensions
+          zip -r "remindrx_deploy-${{ github.sha }}.zip" ./server ./scanner ./recommend ./.ebextensions ./requirements.txt ./Procfile
 
       - name: Upload application artifact
         uses: actions/upload-artifact@v4
@@ -45,7 +47,7 @@ jobs:
       - name: Create new application version
         run: |
           aws elasticbeanstalk create-application-version \
-          --application-name flaskbb \
+          --application-name RemindRX \
           --source-bundle S3Bucket="dddictionary-remindrx",S3Key="remindrx_deploy-${{ github.sha }}.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
@@ -53,5 +55,5 @@ jobs:
       - name: Deploy application
         run: |
           aws elasticbeanstalk update-environment \
-          --environment-name flaskbb-env \
+          --environment-name RemindRX-env \
           --version-label "ver-${{ github.sha }}"
