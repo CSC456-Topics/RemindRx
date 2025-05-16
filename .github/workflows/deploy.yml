@@ -19,11 +19,21 @@ jobs:
         ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
     - name: Deploy to EC2
-      run: | #run the deployment for my ec2 instance with working tesseract (tests pass)
+      run: |
         ssh -o StrictHostKeyChecking=no ubuntu@34.226.150.36 << 'EOF'
+          set -e  # exit on any error
+
           cd ~/RemindRx
+          echo "🌀 Pulling latest code..."
           git pull origin main
+
+          echo "🔪 Killing old tmux session..."
           tmux kill-session -t remindrx || true
-          tmux new-session -d -s remindrx 'python3 -m server.server'
-          echo "✅ Tmux session restarted"  
+
+          echo "🚀 Starting new tmux session..."
+          tmux new-session -d -s remindrx '~/RemindRx/venv/bin/python3 -m server.server'
+
+          echo "✅ Tmux session restarted"
+          tmux ls
         EOF
+
