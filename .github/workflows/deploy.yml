@@ -31,7 +31,7 @@ jobs:
           tmux kill-session -t remindrx || true
 
           echo "🚀 Starting new tmux session..."
-          tmux new-session -d -s remindrx '~/RemindRx/venv/bin/gunicorn -b 0.0.0.0:8080 "server.server:create_app()"'
+          tmux new-session -d -s remindrx -- ~/RemindRx/venv/bin/gunicorn -b 0.0.0.0:8080 "server.server:create_app()"
 
           echo "✅ Tmux session restarted"
           tmux ls
