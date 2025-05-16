@@ -66,7 +66,7 @@ def test2():
 '''
 @models_api.route("/test3", methods=["GET"]) #should return a basic string
 def test3():
-    return jsonify({"gg": "you deployed it!"}) #just wanna see if cd works
+    return jsonify({"gg": "lgtm"}) #just wanna see if cd works
 
 #note from jawad- these are methods to get the patient's medications for a given time of day. mainly just debug for the helper functions
 #since the helpers already check for valid and invalid output, we can just use exception handling to catch any errors that might occur in the api route
