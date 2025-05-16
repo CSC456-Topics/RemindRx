@@ -57,14 +57,16 @@ def test():
     db = get_db()
     upload(db, 6, "description", "skibidi toilet")
     return jsonify({"gg": "you won"})
-
+'''
 @models_api.route("/test2", methods=["GET"]) #should return my email
 def test2():
     db = get_db()
 
     return jsonify({"Email":get_email(db, 6)}) #use the get_email function to get the email of the user with a given patient_id 
-
-
+'''
+@models_api.route("/test3", methods=["GET"]) #should return a basic string
+def test3():
+    return jsonify({"gg": "you deployed it!"}) #just wanna see if cd works
 
 #note from jawad- these are methods to get the patient's medications for a given time of day. mainly just debug for the helper functions
 #since the helpers already check for valid and invalid output, we can just use exception handling to catch any errors that might occur in the api route
