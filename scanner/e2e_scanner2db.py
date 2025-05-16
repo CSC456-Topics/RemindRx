@@ -6,11 +6,14 @@ from scanner.model import extract_text_from_label
 from recommend.recommend2db import recommend2db
 
 def scan_and_recommend(file_like_object):
-    # Extract text from the label
+    #dummy data for testing
     text = extract_text_from_label(file_like_object)
-    
-    # Recommend times based on the extracted text
-    recommended_times = recommend2db(text)
+    name = "TestMed"
+    refill_time = "2"
+    refills = "1"
+    amount = "10"
+
+    recommended_times = recommend2db(text, name, refill_time, refills, amount)
     
     return recommended_times
 '''
