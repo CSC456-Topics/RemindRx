@@ -21,20 +21,9 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@34.226.150.36 << 'EOF'
-          set -e  # exit on any error
-
+          set -e
           cd ~/RemindRx
-          echo "🌀 Pulling latest code..."
           git pull origin main
-
-          echo "🔪 Killing old tmux session..."
-          tmux kill-session -t remindrx || true
-
-          echo "🚀 Starting new tmux session..."
-          tmux new-session -d -s remindrx "sh -c '~/RemindRx/venv/bin/gunicorn -b 0.0.0.0:8080 \"server.server:create_app()\" >> ~/remindrx.log 2>&1'"
-
-
-          echo "✅ Tmux session restarted"
-          tmux ls
+          sudo systemctl restart remindrx
+          echo "✅ Systemd service restarted"
         EOF
-
