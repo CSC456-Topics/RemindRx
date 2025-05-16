@@ -27,9 +27,14 @@ def scan():
         return jsonify({"error": "No file was selected"}), 400
     
     name = request.form.get("name", "")
-    refill_time = request.form.get("refillTime", "")
-    refills = request.form.get("refills", "")
-    amount = request.form.get("amount", "")
+    refill_time = request.form.get("refillTime")
+    refills = request.form.get("refills")
+    amount = request.form.get("amount")
+
+    # Convert to int or None
+    refill_time = int(refill_time) if refill_time and refill_time.isdigit() else None
+    refills = int(refills) if refills and refills.isdigit() else None
+    amount = int(amount) if amount and amount.isdigit() else None
     
     try:
         extracted_text = extract_text_from_label(image)
